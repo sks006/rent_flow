@@ -99,47 +99,189 @@ edge cases
 
 │   └── package.json
 
-├── web/                                       # FRONTEND (Next.js + Tailwind) - 
-User-friendly for cycles
+├── web/                                       # FRONTEND (Vite + React + TypeScript + Tailwind)
+
+│   ├── public/
+
+│   │   ├── vite.svg
+
+│   │   └── favicon.ico
 
 │   ├── src/
 
-│   │   ├── app/                               # App Router (Next.js 14+)
+
+│   │   ├── app/                               # Main app components
+
+│   │   │   ├── Layout.tsx                     # Main layout with navigation
+
+│   │   │   ├── HomePage.tsx                   # Landing page
+
+│   │   │   ├── Dashboard.tsx                  # User dashboard
+
+│   │   │   ├── RentFlow.tsx                   # Rent management interface
+
+│   │   │   └── Governance.tsx                 # Governance voting interface
+
 
 │   │   ├── components/
 
-│   │   │   ├── WalletProvider.tsx
+│   │   │   ├── common/
 
-│   │   │   ├── BookingCard.tsx                # Visualizes the RWA Asset
+│   │   │   │   ├── Header.tsx                 # Navigation header
 
-│   │   │   ├── DashBoard.tsx                  # Real-time LTV & profit-share tracking (no 
-interest)
+│   │   │   │   ├── Footer.tsx                 # Page footer
 
-│   │   │   ├── CycleSelector.tsx              # New: UI for choosing lock periods
+│   │   │   │   ├── Sidebar.tsx                # Side navigation
 
-│   │   │   └── GovernanceVote.tsx             # New: Voting interface for proposals
+│   │   │   │   ├── Card.tsx                   # Reusable card component
 
-│   │   └── hooks/
+│   │   │   │   ├── Button.tsx                 # Custom button component
 
-│   │       ├── useRentFlow.ts                 # Anchor Program Interactivity
+│   │   │   │   ├── Modal.tsx                  # Modal dialog component
 
-│   │       └── useCycleLock.ts                # New: Handles cycle interactions
+│   │   │   │   └── Toast.tsx                  # Notification toast
 
-│   └── tailwind.config.js
+│   │   │   ├── wallet/
 
-├── scripts/                                   # New: Deployment and CI/CD - Boosts 
-reliability
+│   │   │   │   ├── WalletProvider.tsx         # Wallet connection provider
 
-│   ├── deploy.sh                              # Automates Solana deployment
+│   │   │   │   ├── WalletButton.tsx           # Wallet connect button
 
-│   └── test_ci.yml                            # GitHub Actions for tests
+│   │   │   │   └── WalletBalance.tsx          # Display wallet balance
 
-├── docs/                                      # New: Documentation - Improves adoption/
-hackathon scores
 
-│   ├── README.md                              # Project overview, model details
+│   │   │   ├── rent/
 
-│   └── architecture.md                        # Diagrams of profit-sharing flow
+│   │   │   │   ├── BookingCard.tsx            # Visualizes the RWA Asset
 
-└── security/                                  # New: Security notes - Placeholder for audits
-    └── audit_notes.md                         # Best practices, potential vulnerabilities
+│   │   │   │   ├── CycleSelector.tsx          # UI for choosing lock periods
+
+│   │   │   │   ├── RentCalculator.tsx         # Calculate rent requirements
+
+
+│   │   │   │   ├── DepositWithdraw.tsx        # Deposit/withdraw interface
+
+│   │   │   │   └── AccountStatus.tsx          # Display account status
+
+│   │   │   └── governance/
+
+│   │   │       ├── ProposalCard.tsx           # Display proposal
+
+│   │   │       ├── VoteButton.tsx             # Voting interface
+
+│   │   │       └── ProposalList.tsx           # List of proposals
+
+│   │   ├── hooks/
+
+│   │   │   ├── useRentFlow.ts                 # Anchor Program interactivity
+
+
+│   │   │   ├── useCycleLock.ts                # Handles cycle interactions
+│   │   │   ├── useGovernance.ts               # Governance contract interactions
+
+│   │   │   ├── useWallet.ts                   # Wallet state management
+
+│   │   │   └── useToast.ts                    # Toast notification hook
+
+│   │   ├── contexts/
+
+│   │   │   ├── WalletContext.tsx              # Wallet provider context
+
+│   │   │   ├── ToastContext.tsx               # Toast notification context
+
+│   │   │   └── RentFlowContext.tsx            # Rent flow state context
+
+│   │   ├── utils/
+
+│   │   │   ├── constants.ts                   # App constants (RPC endpoints, program IDs)
+
+│   │   │   ├── helpers.ts                     # Helper functions
+
+│   │   │   ├── solana.ts                      # Solana-specific utilities
+
+│   │   │   └── formatters.ts                  # Data formatting utilities
+
+│   │   ├── styles/
+
+│   │   │   ├── globals.css                    # Global CSS styles
+
+│   │   │   ├── themes.css                     # Theme variables
+
+
+│   │   │   └── animations.css                 # CSS animations
+
+│   │   ├── types/
+
+│   │   │   ├── index.ts                       # TypeScript type definitions
+
+│   │   │   ├── solana.ts                      # Solana-related types
+
+│   │   │   └── rentflow.ts                    # RentFlow-specific types
+
+│   │   ├── lib/
+
+│   │   │   └── api.ts                         # API client for backend
+
+│   │   ├── config/
+
+│   │   │   ├── chains.ts                      # Chain configurations
+
+│   │   │   └── programs.ts                    # Program configurations
+
+│   │   ├── assets/
+
+│   │   │   ├── images/                        # Image assets
+
+│   │   │   ├── icons/                         # SVG icons
+
+│   │   │   └── fonts/                         # Custom fonts
+
+│   │   ├── pages/                             # (Optional) For pages router if needed
+
+│   │   ├── main.tsx                           # Application entry point
+
+│   │   ├── App.tsx                            # Root App component
+
+│   │   └── vite-env.d.ts                      # Vite environment types
+
+│   ├── index.html                             # Main HTML file
+
+│   ├── package.json                           # Dependencies and scripts
+
+│   ├── package-lock.json                      # Lock file
+
+
+│   ├── tsconfig.json                          # TypeScript configuration
+
+│   ├── tsconfig.node.json                     # Node TypeScript config
+
+│   ├── vite.config.ts                         # Vite configuration
+
+│   ├── tailwind.config.js                     # Tailwind CSS configuration
+
+│   ├── postcss.config.js                      # PostCSS configuration
+
+│   ├── .env.example                           # Environment variables example
+
+│   ├── .gitignore                             # Git ignore rules
+
+│   ├── eslint.config.js                       # ESLint configuration
+
+│   ├── README.md                              # Frontend README
+
+│   └── vercel.json                            # Vercel deployment config (if deploying)
+
+├── scripts/
+
+│   ├── deploy.sh
+
+│   └── test_ci.yml
+
+├── docs/
+
+│   ├── README.md
+
+│   └── architecture.md
+
+└── security/
+    └── audit_notes.md

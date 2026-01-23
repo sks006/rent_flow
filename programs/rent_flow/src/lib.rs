@@ -18,4 +18,8 @@ pub mod rent_flow {
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         initialize::handler(ctx)
     }
+
+    pub fn add_token(ctx:Context<InitializeSupportedToken>,ltv:u16)->Result<()>{
+        InitializeSupportedToken::handler(ctx)
+    }
 }
