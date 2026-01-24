@@ -1,4 +1,51 @@
-RentFlow/
+# 🌊 RentFlow: Cash-Flow RWA Protocol
+
+### *Unlocking the Liquidity of Future Rental Income*
+
+RentFlow is a Solana-native B2B2C protocol that allows Property Management Companies to tokenize future Airbnb/rental income into Real-World Asset (RWA) NFTs. By selling a portion of their future profit today, hosts gain instant liquidity, while investors earn "Real Yield" from verified business performance.
+
+---
+
+## 🎯 The Problem: Dead Capital
+
+Short-term rental hosts have thousands of dollars locked in "Confirmed" future bookings (Airbnb, VRBO). Traditional banks do not recognize this as collateral, leaving hosts cash-poor while they wait 3–6 months for a guest to check in.
+
+## 💡 The Solution: RentFlow
+
+We create a **Synthetic Equity Market** for rental income.
+
+* **B2B Integration:** Property platforms (Integrators) verify booking data on-chain.
+* **C-side Liquidity:** Individual hosts mint NFTs representing their bookings and receive instant USDC.
+* **Investor Profit-Share:** Investors provide capital to vaults and earn a percentage of the final rental payout.
+
+---
+
+## 💎 The "Real Yield" Model (No-Yield)
+
+RentFlow rejects inflationary tokenomics. Every dollar earned by investors comes from a physical transaction in the real world.
+
+| Cycle | Target Participant | Investment Goal |
+| --- | --- | --- |
+| **1 Month** | Aggressive Investors | High-velocity, short-term booking turnover. |
+| **3 Months** | Balanced Portfolios | Seasonal rental cycles (Summer/Winter peaks). |
+| **6 Months** | Institutional LPs | Stable, long-term exposure to the rental market. |
+
+> **The Exit Penalty:** To protect the integrity of the profit-share, users who withdraw capital before their cycle ends incur a **5% penalty**, which is redistributed to the remaining "diamond hand" investors in that pool. 💎
+
+---
+
+## 🛠️ Technical Stack
+
+* **Blockchain:** Solana (L1)
+* **Program:** Rust + Anchor Framework
+* **Token Standard:** **Token-2022** (extensions: Transfer Hooks, Metadata Pointer)
+* **Frontend:** Next.js + Tailwind CSS
+* **Wallet:** Phantom, Backpack (Solana Wallet Adapter)
+
+---
+
+## 🧱 Project Structure
+
 
 ├── anchor/                     # SMART CONTRACTS (Rust/Anchor) - Modular for DeFi 
 scalability
@@ -172,26 +219,18 @@ Metadata gen
 
 └── docs/                           # Protocol Specs & Security Audits
 
+## 🛡️ Trust & Compliance
 
-### 9 Day 
+1. **Oracle Verification:** Direct API verification of Airbnb bookings to prevent "Phantom Mints."
+2. **ZK-KYC:** Privacy-first identity verification for every host.
+3. **Legal Recourse:** Digital lien agreements hashed into the NFT metadata, enforceable in traditional courts.
 
+---
 
-#### 1. The Asset Minting (`mint_booking.rs`) 🎫
+## 🚀 Future Roadmap
 
-This is where we turn a real-world Airbnb booking into a Solana NFT.
+* **Secondary Market:** Trade your "6-month Profit NFT" on Tensor or Magic Eden.
+* **Multi-Platform Support:** Expanding beyond Airbnb to hotels and commercial leases.
+* **Dynamic LTV:** AI-driven loan-to-value ratios based on a property's historic performance.
 
-* **Logical Journey:** Data enters from an **Oracle** (verifying the booking exists) and results in a **Token-2022 NFT** being minted to the Host's wallet.
-* **Key Feature:** We attach a **Transfer Hook** here. This is the "Security Guard" that will later prevent the NFT from being sold while a loan is active.
-
-#### 2. The Collateral Lock (`deposit_collateral.rs`) 🔐
-
-Now that the Host has an NFT, they want to "factor" it (get cash now).
-
-* **Transformation:** The Host sends the NFT to the program. The program checks the `SupportedToken` state we just built to see how much it can lend (the **LTV**).
-* **Exit:** The program marks the `BookingObligation` as `locked_status = true`.
-
-#### 3. The Payout (`withdraw_liquidity.rs`) 💸
-
-* **Action:** The USDC moves from your `toke_vault` to the Host.
-* **Constraint:** This only happens if the NFT is successfully locked in Step 2.
-
+---
