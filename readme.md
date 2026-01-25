@@ -43,7 +43,7 @@ RentFlow rejects inflationary tokenomics. Every dollar earned by investors comes
 * **Wallet:** Phantom, Backpack (Solana Wallet Adapter)
 
 ---
-
+```
 ## 🧱 Project Structure
 
 
@@ -185,7 +185,7 @@ rentflow/
     
     └── API.md
 
-
+```
 ## 🛡️ Trust & Compliance
 
 
