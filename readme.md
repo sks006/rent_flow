@@ -48,74 +48,143 @@ RentFlow rejects inflationary tokenomics. Every dollar earned by investors comes
 
 
 rentflow/
+
 ├── anchor/
+
 │   ├── programs/
+
 │   │   ├── rent_core/
+
 │   │   │   ├── src/
+
 │   │   │   │   ├── lib.rs
+
 │   │   │   │   ├── state.rs
+
 │   │   │   │   ├── errors.rs
+
 │   │   │   │   └── instructions/
+
 │   │   │   │       ├── mod.rs
+
 │   │   │   │       ├── init_vault.rs
+
 │   │   │   │       ├── mint_booking.rs
+
 │   │   │   │       ├── lock_cycle.rs
+
 │   │   │   │       ├── withdraw_liquidity.rs
+
 │   │   │   │       ├── distribute_fees.rs
+
 │   │   │   │       └── settle_booking.rs
+
 │   │   ├── compliance_hook/
+
 │   │   │   └── src/
+
 │   │   │       └── lib.rs
+
 │   │   └── oracle_bridge/
+
 │   │       └── src/
+
 │   │           └── lib.rs
+
 │   ├── tests/
+
 │   │   ├── rent_flow.ts
+
 │   │   └── cycle_lock.ts
+
 │   ├── migrations/
+
 │   │   └── deploy.ts
+
 │   └── Anchor.toml
+
 │
+
 ├── web/
+
 │   ├── src/
+
 │   │   ├── app/
+
 │   │   │   ├── api/
+
 │   │   │   │   ├── airbnb-proxy/
+
 │   │   │   │   │   └── route.ts
+
 │   │   │   │   └── metadata/
+
 │   │   │   │       └── route.ts
+
 │   │   │   ├── dashboard/
+
 │   │   │   │   └── page.tsx
+
 │   │   │   ├── rent/
+
 │   │   │   │   └── page.tsx
+
 │   │   │   ├── layout.tsx
+
 │   │   │   └── page.tsx
+
 │   │   ├── components/
+
 │   │   │   ├── rent/
 │   │   │   │   ├── BookingCard.tsx
+
 │   │   │   │   └── CycleSelector.tsx
+
 │   │   │   └── ui/
+
 │   │   │       ├── button.tsx
+
 │   │   │       └── card.tsx
+
 │   │   ├── hooks/
+
 │   │   │   ├── useRentProgram.ts
+
 │   │   │   └── useVaultData.ts
+
 │   │   └── lib/
+
 │   │       └── solana/
+
 │   │           ├── pda.ts
+
 │   │           └── idl.ts
+
 │   ├── next.config.js
+
 │   ├── package.json
+
 │   └── tsconfig.json
+
 │
+
 ├── scripts/
+
 │   ├── deploy.sh
+
 │   └── seed_data.ts
+
 │
+
 └── docs/
+    
     ├── README.md
+    
     ├── SPECS.md
+    
+    
     └── API.md
+
 
 ## 🛡️ Trust & Compliance
 
