@@ -4,4 +4,10 @@ use anchor_lang::prelude::*;
 pub enum ErrorCode {
     #[msg("Custom error message")]
     CustomError,
+    IntegratorNotAuthorized,
+    BookingAlreadyStarted,
+    InvalidOracleKey,
+    OracleMessageMismatch,
+    InvalidOffset
+
 }
