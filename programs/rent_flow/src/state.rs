@@ -5,6 +5,7 @@ use anchor_lang::prelude::*;
 // Step 2: Define the account structure using the #[account] attribute macro
 // This macro tells Anchor that this struct represents an on-chain account
 #[account]
+#[derive(InitSpace)]
 pub struct BookingObligation {
     // Step 3: Define the account fields
     
@@ -23,6 +24,8 @@ pub struct BookingObligation {
     // bool (1 byte) - boolean flag indicating if the obligation is locked
     // true = locked/cannot be modified, false = active/can be modified
     locked_status: bool,
+    _reserved: [u8; 7],
+    
     
     // i64 (8 bytes) - signed 64-bit integer for timestamp expiration
     // Typically represents Unix timestamp when the booking obligation expires
@@ -41,7 +44,7 @@ impl BookingObligation {
     
     // Correct calculation including Anchor's 8-byte discriminator:
     // 8 (discriminator) + 32 + 32 + 8 + 8 + 1 + 8 = 97 bytes
-    pub const SIZE: usize = 8 + 32 + 32 + 8 + 8 + 1 + 8;
+    pub const SIZE: usize = 8 + BookingObligation::INIT_SPACE;
     
     // Alternative way to calculate - this is more maintainable:
     // pub const SIZE: usize = 8 + // discriminator
@@ -54,6 +57,7 @@ impl BookingObligation {
 }
 
 #[account]
+#[derive(InitSpace)]
 pub struct SupportedToken {
     // Line 5: Mint address - 32 bytes
     // This is the token mint (e.g., USDC mint, SOL mint)
@@ -76,6 +80,7 @@ pub struct SupportedToken {
     // Critical for PDA (Program Derived Address) validation
     // Stores the bump seed used to create this PDA
     // Used to verify the PDA was created correctly
+    _reserved: [u8; 7],
     pub bump: u8,
 }
 
@@ -84,7 +89,7 @@ pub struct SupportedToken {
 impl SupportedToken {
     // Line 11: Constant defining the account size - REQUIRED in Anchor
     // This tells Anchor how much space to allocate for this account
-    pub const SIZE: usize = 8 + 32 + 2 + 1 + 1;
+    pub const SIZE: usize = SupportedToken::INIT_SPACE + 64;
     //           │     │    │   │   │  │   │
     //           │     │    │   │   │  │   └─ 1 byte for bump (u8)
     //           │     │    │   │   │  └─ 1 byte for is_active (bool)

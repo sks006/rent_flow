@@ -44,9 +44,12 @@ pub struct InitializeSupportedToken<'info> {
         init,
         payer = admin,
         space = SupportedToken::SIZE,
-        seeds = [b"supported_token", mint.key().as_ref()],
-        bump
-    )]
+        seeds = [b"vault", mint.key().as_ref()],
+      bump  
+        
+    )
+    
+    ]
     pub supported_token: Account<'info, SupportedToken>,
 
     #[account(
@@ -76,11 +79,17 @@ pub struct InitializeSupportedToken<'info> {
   C. Exit: return Ok(());
 */
 pub fn handler(ctx: Context<InitializeSupportedToken>, ltv_bps: u16) -> Result<()> {
-    let support_token = &mut ctx.accounts.supported_token;
+    // 1. Reference the account from the context
+    let supported_token = &mut ctx.accounts.supported_token;
+    
+    // 2. Assign the data
     supported_token.mint = ctx.accounts.mint.key();
-    support_token.is_active = true;
-    support_token.ltv_bps = 5000;
-    support_token.bump = 8;
+    supported_token.ltv_bps = ltv_bps; // Use the passed argument!
+    supported_token.is_active = true;
+    
+    // 3. Access the specific bump discovered by Anchor
+    support_token.bump = ctx.bumps.supported_token;
+    
     Ok(())
 }
 
