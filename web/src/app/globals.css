@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  body {
+    @apply bg-background text-text-primary font-sans antialiased;
+    background: linear-gradient(180deg, #0a0f1e 0%, #0b1a31 100%);
+    min-height: 100vh;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-surface-glass backdrop-blur-md border border-white/10;
+  }
+
+  .glass-strong {
+    @apply bg-surface backdrop-blur-xl border border-white/10;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-primary text-white font-semibold rounded-lg 
+           transition-all duration-300 hover:shadow-glow-md hover:scale-105
+           active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 glass-strong text-text-primary font-semibold rounded-lg
+           transition-all duration-300 hover:bg-surface-hover hover:border-primary/50;
+  }
+
+  .btn-outline {
+    @apply px-6 py-3 border-2 border-primary text-primary font-semibold rounded-lg
+           transition-all duration-300 hover:bg-primary hover:text-background
+           active:scale-95;
+  }
+
+  /* Card styles */
+  .card {
+    @apply glass-strong rounded-2xl p-6 transition-all duration-300
+           hover:border-primary/30 hover:shadow-glow-sm;
+  }
+
+  .card-interactive {
+    @apply card cursor-pointer hover:scale-[1.02] hover:shadow-glow-md;
+  }
+
+  /* Text gradients */
+  .text-gradient {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
+  }
+
+  .text-gradient-accent {
+    @apply bg-gradient-accent bg-clip-text text-transparent;
+  }
+
+  /* Glow effects */
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px rgba(153, 69, 255, 0.4);
+  }
+
+  /* Container */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Animated gradient background */
+  .animated-gradient {
+    background: linear-gradient(
+      -45deg,
+      #0a0f1e,
+      #0b1a31,
+      #1a2332,
+      #0b1a31
+    );
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Scrollbar styling */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-background-secondary;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-primary/30 rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/50;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
