@@ -8,6 +8,9 @@ pub enum ErrorCode {
     BookingAlreadyStarted,
     InvalidOracleKey,
     OracleMessageMismatch,
-    InvalidOffset
+    InvalidOffset,
+    MathOverflow,
+    InvalidInstructionIndex,
+    InvalidProgramId
 
 }

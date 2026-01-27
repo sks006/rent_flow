@@ -6,30 +6,35 @@ use anchor_lang::prelude::*;
 // This macro tells Anchor that this struct represents an on-chain account
 #[account]
 #[derive(InitSpace)]
+pub struct IntegratorConfig {
+    pub bump: u8,
+    pub is_active: bool,
+    pub authority: Pubkey, // The wallet that can manage this config
+}
+
+#[account]
+#[derive(InitSpace)]
 pub struct BookingObligation {
-    // Step 3: Define the account fields
+    // Rule: String limits for safety (Borsh serialization requirement)
+    #[max_len(32)] 
+    pub booking_id: String, 
     
-    // Pubkey is a public key type (32 bytes) - stores the host's wallet address
-    host: Pubkey,
+    pub booking_value: u64,    // Total value of the booking
+    pub max_principal: u64,    // Max borrowable amount (calculated via LTV)
+    pub borrowed_amount: u64,  // Current debt
     
-    // Pubkey (32 bytes) - stores the borrower's wallet address  
-    mint: Pubkey,
+    pub start_date: i64,       // Booking start
+    pub end_date: i64,         // Booking end (expiry)
     
-    // u64 (8 bytes) - unsigned 64-bit integer for the total value/amount
-    value: u64,
+    pub host_wallet: Pubkey,       // The RWA owner
+    pub integrator_wallet: Pubkey, // The platform
+    pub nft_mint: Pubkey,          // The Token-2022 asset
     
-    // u64 (8 bytes) - unsigned 64-bit integer for the amount currently borrowed
-    borrowed_amount: u64,
+    pub is_locked: bool,   // True if currently used as collateral
+    pub is_settled: bool,  // True if booking is completed/paid out
     
-    // bool (1 byte) - boolean flag indicating if the obligation is locked
-    // true = locked/cannot be modified, false = active/can be modified
-    locked_status: bool,
-    _reserved: [u8; 7],
-    
-    
-    // i64 (8 bytes) - signed 64-bit integer for timestamp expiration
-    // Typically represents Unix timestamp when the booking obligation expires
-    expiry: i64,
+    // Padding for alignment (optional but good practice)
+    pub bump: u8,
 }
 
 // Step 4: Implement methods for the BookingObligation struct
@@ -76,12 +81,13 @@ pub struct SupportedToken {
     // false = token is temporarily disabled
     pub is_active: bool,
     
+    pub bump: u8,
     // Line 8: PDA bump - 1 byte
     // Critical for PDA (Program Derived Address) validation
     // Stores the bump seed used to create this PDA
     // Used to verify the PDA was created correctly
     _reserved: [u8; 7],
-    pub bump: u8,
+    
 }
 
 // Line 10: Implementation block for SupportedToken struct
