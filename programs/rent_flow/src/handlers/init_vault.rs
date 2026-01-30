@@ -88,7 +88,7 @@ pub fn handler(ctx: Context<InitializeSupportedToken>, ltv_bps: u16) -> Result<(
     supported_token.is_active = true;
     
     // 3. Access the specific bump discovered by Anchor
-    support_token.bump = ctx.bumps.supported_token;
+    supported_token.bump = ctx.bumps.supported_token;
     
     Ok(())
 }

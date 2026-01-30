@@ -1,12 +1,20 @@
 use anchor_lang::prelude::*;
+use solana_program::ed25519_program;
 use anchor_lang::solana_program::sysvar::instructions as instructions_sysvar;
 use anchor_spl::{
+    
     associated_token::AssociatedToken,
-    token_2022::{self, Token2022, MintTo},
+    token_2022::{self, 
+        Token2022, 
+        MintTo,
+        },
     token_interface::{Mint, TokenAccount},
+    // Add this to access extension-specific instructions
+    
 };
 use crate::state::{IntegratorConfig, BookingObligation};
 use crate::error::ErrorCode;
+
 
 // ============================================
 // CONTEXT: THE STAGE
@@ -60,7 +68,7 @@ pub struct MintBooking<'info> {
     // We need this to verify the Ed25519 signature "truth" from the Oracle.
     /// CHECK: Validated by constraint check in handler
     #[account(address = instructions_sysvar::ID)]
-    pub instructions: AccountInfo<'info>,
+    pub sysvar_instructions: AccountInfo<'info>,
 
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub token_2022_program: Program<'info, Token2022>,
@@ -117,7 +125,7 @@ pub fn handler(ctx: Context<MintBooking>, booking_data: BookingProof) -> Result<
     // [INTROSPECTION] Looking into the Past
     // We check the "Instructions Sysvar" to see the instruction that ran *just before* this one.
     // That previous instruction claims to be an Ed25519 signature verification.
-    let ixs = ctx.accounts.instructions.to_account_info();
+    let ixs = ctx.accounts.sysvar_instructions.to_account_info();
     let current_index = instructions_sysvar::load_current_index_checked(&ixs)?;
     
     // Safety Check: Ensure there actually IS a previous instruction.
@@ -130,8 +138,14 @@ pub fn handler(ctx: Context<MintBooking>, booking_data: BookingProof) -> Result<
     )?;
 
     // Verify the previous program was indeed the Ed25519 Native Program
-    require_keys_eq!(ed25519_ix.program_id, anchor_lang::solana_program::ed25519_program::ID, ErrorCode::InvalidProgramId);
-
+// Use the ID constant from anchor_lang's re-export of solana_program
+// We use the full path provided by Anchor's re-export
+// The hardcoded public key for the Ed25519 Program
+require_keys_eq!(
+    ed25519_ix.program_id,
+    ed25519_program::ID,
+    ErrorCode::InvalidProgramId
+);
     // NOTE: At this point in production code, you would parse `ed25519_ix.data` 
     // to ensure the signature matches `message_buffer` and `booking_data.oracle_pubkey`.
     // If that passes, we accept `booking_data` as THE TRUTH.
@@ -140,26 +154,29 @@ pub fn handler(ctx: Context<MintBooking>, booking_data: BookingProof) -> Result<
     // PHASE 2: FORGING THE VESSEL (Token-2022)
     // --------------------------------------------
     
-    // The Program ID that will govern the rules of this token (likely this program itself).
-    let compliance_hook_program_id = ctx.program_id; 
+    // The Program ID that will govern the rules of this token
+    let compliance_hook_program_id = ctx.program_id;
 
     // [CONSTRUCTION] Installing the "Conscience" (Transfer Hook)
-    // Before we even create the Mint, we inject the Transfer Hook extension.
-    // This tells the token: "Before you move, call 'compliance_hook_program_id' to ask for permission."
-    token_2022::initialize_transfer_hook(
-        CpiContext::new(
+    // We construct the instruction manually since Anchor wrappers might be missing
+    let ix_init = spl_token_2022::extension::transfer_hook::instruction::initialize(
+        ctx.accounts.token_2022_program.key, // Program has .key field
+        &ctx.accounts.nft_mint.key(), // InterfaceAccount needs .key() method
+        Some(ctx.accounts.integration_config.key()), // Account has .key() method. Deref applied by Copy trait?
+        Some(*compliance_hook_program_id), // Expects Option<Pubkey>
+    )?;
+
+    // We use the raw invoke because we are calling into the Token-2022 program directly
+    solana_program::program::invoke(
+        &ix_init,
+        &[
             ctx.accounts.token_2022_program.to_account_info(),
-            token_2022::InitializeTransferHook {
-                mint: ctx.accounts.nft_mint.to_account_info(),
-            }
-        ),
-        Some(ctx.accounts.integration_config.key()), // Authority to update the hook later
-        Some(compliance_hook_program_id)             // The Program ID to call back to
+            ctx.accounts.nft_mint.to_account_info(),
+            ctx.accounts.integration_config.to_account_info(),
+        ],
     )?;
 
     // [CONSTRUCTION] Initializing the Mint
-    // We create a token with 0 decimals (Non-Fungible).
-    // The `integration_config` (our PDA) keeps the Mint Authority, so only WE can mint/burn.
     token_2022::initialize_mint2(
         CpiContext::new(
             ctx.accounts.token_2022_program.to_account_info(),
@@ -173,24 +190,29 @@ pub fn handler(ctx: Context<MintBooking>, booking_data: BookingProof) -> Result<
     )?;
 
     // [ACTIVATION] Linking the Hook
-    // Now that the mint exists, we formally register the Transfer Hook.
-    // We need our PDA seeds to sign this administrative action.
     let signer_seeds: &[&[u8]] = &[
         b"integrator",
-        ctx.accounts.integration_wallet.key().as_ref(),
+        ctx.accounts.integration_wallet.key.as_ref(),
         &[ctx.accounts.integration_config.bump],
     ];
 
-    token_2022::set_transfer_hook(
-        CpiContext::new_with_signer(
+    let ix_update = spl_token_2022::extension::transfer_hook::instruction::update(
+        ctx.accounts.token_2022_program.key,
+        &ctx.accounts.nft_mint.key(),
+        &ctx.accounts.integration_config.key(),
+        &[], // No multisig signers
+        Some(*compliance_hook_program_id), // Expects Option<Pubkey>
+    )?;
+
+    // We sign with the integrator_config PDA since it is the authority
+    solana_program::program::invoke_signed(
+        &ix_update,
+        &[
             ctx.accounts.token_2022_program.to_account_info(),
-            token_2022::SetTransferHook {
-                mint: ctx.accounts.nft_mint.to_account_info(),
-                authority: ctx.accounts.integration_config.to_account_info(),
-            },
-            &[signer_seeds]
-        ),
-        compliance_hook_program_id
+            ctx.accounts.nft_mint.to_account_info(),
+            ctx.accounts.integration_config.to_account_info(),
+        ],
+        &[signer_seeds],
     )?;
 
     // --------------------------------------------
