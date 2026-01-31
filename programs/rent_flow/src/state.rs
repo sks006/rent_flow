@@ -105,3 +105,20 @@ impl SupportedToken {
     //           │     └─ Total size in bytes
     //           └─ Compile-time constant
 }
+
+#[account]
+#[derive(InitSpace)]
+pub struct Position {
+    pub owner: Pubkey,
+    pub principal: u64,
+    pub realized_profit: u64,
+    pub unlock_ts: i64,
+    pub bump: u8,
+}
+
+#[account]
+#[derive(InitSpace)]
+pub struct PoolVault {
+    pub total_liquidity_tracked: u64,
+    pub bump: u8,
+}

@@ -53,55 +53,34 @@ rentflow/
 
 │   ├── programs/
 
-│   │   ├── rent_core/
+│   │   └── rent_flow/              
 
-│   │   │   ├── src/
 
-│   │   │   │   ├── lib.rs
+│   │       ├── src/
 
-│   │   │   │   ├── state.rs
+│   │       │   ├── lib.rs          <-- Logic Routing
 
-│   │   │   │   ├── errors.rs
+│   │       │   ├── state.rs        <-- Data Structures
 
-│   │   │   │   └── instructions/
+│   │       │   ├── error.rs        <-- Safety Sensors
 
-│   │   │   │       ├── mod.rs
+│   │       │   └── handlers/       
 
-│   │   │   │       ├── init_vault.rs
+│   │       │       ├── mod.rs      
 
-│   │   │   │       ├── mint_booking.rs
+│   │       │       ├── init_vault.rs     <-- 1. Whitelist Collateral
 
-│   │   │   │       ├── lock_cycle.rs
+│   │       │       ├── mint_booking.rs   <-- 2. Tokenize RWA
 
-│   │   │   │       ├── withdraw_liquidity.rs
+│   │       │       ├── deposit_collateral.rs <-- 3. Lock & Secure
 
-│   │   │   │       ├── distribute_fees.rs
+│   │       │       └── settle_booking.rs  <-- 4. Final Payout/Release
 
-│   │   │   │       └── settle_booking.rs
-
-│   │   ├── compliance_hook/
-
-│   │   │   └── src/
-
-│   │   │       └── lib.rs
-
-│   │   └── oracle_bridge/
-
-│   │       └── src/
-
-│   │           └── lib.rs
+│   └── Anchor.toml
 
 │   ├── tests/
 
-│   │   ├── rent_flow.ts
-
-│   │   └── cycle_lock.ts
-
-│   ├── migrations/
-
-│   │   └── deploy.ts
-
-│   └── Anchor.toml
+│   │   └── rent_flow.ts            <-- The Proving Grounds (Test Suite)
 
 │
 

@@ -1,39 +1,48 @@
 use anchor_lang::prelude::*;
 
+declare_id!("5qE2h7vFY6J9uFtHMCji8Ee3dprkvem2YNa3EqtsmVmz");
+
+
 pub mod constants;
 pub mod error;
 pub mod handlers;
 pub mod state;
 
-// These re-exports can be helpful but aren't strictly necessary
-pub use constants::*;
-pub use state::*;
+
+
+#[allow(ambiguous_glob_reexports)]
 pub use handlers::*;
+pub use state::*;
 
 
-
-declare_id!("CAgTPGTnb17aTrdz8Z9DWnDYK2HDiR7K5iSJiTY2CGFS");
 
 #[program]
 pub mod rent_flow {
+
+
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         handlers::initialize::handler(ctx)
     }
 
-    pub fn add_token(ctx: Context<InitializeSupportedToken>, ltv: u16) -> Result<()> {
-        handlers::init_vault::handler(ctx, ltv)
+    pub fn add_token(ctx: Context<InitializeSupportedToken>, ltv_bps: u16) -> Result<()> {
+        handlers::init_vault::handler(ctx, ltv_bps)
     }
 
-    // Add other instruction handlers
     pub fn mint_booking(ctx: Context<MintBooking>, booking_data: BookingProof) -> Result<()> {
         handlers::mint_booking::handler(ctx, booking_data)
     }
 
-    pub fn lock_cycle(ctx: Context<LockCycle>) -> Result<()> {
-        handlers::lock_cycle::handler(ctx)
+    pub fn deposit_collateral(ctx: Context<DepositCollateral>) -> Result<()> {
+        handlers::deposit_collateral::handler(ctx)
     }
 
-    // Add more handlers for deposit_collateral, withdraw_liquidity, etc.
+    pub fn settle_booking(ctx: Context<SettleBooking>) -> Result<()> {
+        handlers::settle_booking::handler(ctx)
+    }
+
+    pub fn withdraw_liquidity(ctx: Context<WithdrawLiquidity>) -> Result<()> {
+        handlers::withdraw_liquidity::handler(ctx)
+    }
 }

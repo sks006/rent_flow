@@ -59,7 +59,7 @@ pub struct InitializeSupportedToken<'info> {
         token::authority = supported_token, // The PDA controls the funds 🏦
         token::token_program = flexible_token_program
     )]
-    pub toke_vault: InterfaceAccount<'info, TokenAccount>,
+    pub token_vault: InterfaceAccount<'info, TokenAccount>,
 
     pub flexible_token_program: Interface<'info, TokenInterface>,
     pub system_program: Program<'info, System>,

@@ -1,5 +1,7 @@
 use anchor_lang::prelude::*;
-use crate::{BookingObligation, error::ErrorCode};
+use crate::state::BookingObligation;
+use crate::error::ErrorCode;
+
 use anchor_spl::token_interface::Mint;
 
 

@@ -35,4 +35,17 @@ pub enum ErrorCode {
 
     #[msg("The account data offset is invalid for the requested operation.")]
     InvalidOffset,
+    #[msg("The rental period has not yet ended. Collateral is still locked.")]
+    BookingNotYetEnded,
+    #[msg("Attempted to settle an already settled obligation.")]
+    AlreadySettled,
+    #[msg("The obligation has not yet been settled.")]
+    NotYetSettled,
+    #[msg("The obligation is still locked.")]
+    ObligationStillLocked,
+    #[msg("The host is not the authorized owner of this obligation.")]
+    NotAuthorizedOwner,
+
+    #[msg("Liquidity is currently locked.")]
+    LiquidityLocked,
 }

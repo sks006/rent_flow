@@ -1,0 +1,15 @@
+use anchor_lang::prelude::*;
+
+pub mod handlers;
+pub mod state;
+
+declare_id!("CAgTPGTnb17aTrdz8Z9DWnDYK2HDiR7K5iSJiTY2CGFS");
+
+#[program]
+pub mod rent_flow {
+    use super::*;
+
+    pub fn initialize(ctx: Context<handlers::initialize::Initialize>) -> Result<()> {
+        handlers::initialize::handler(ctx)
+    }
+}

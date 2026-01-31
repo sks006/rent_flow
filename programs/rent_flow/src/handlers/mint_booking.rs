@@ -1,16 +1,12 @@
 use anchor_lang::prelude::*;
-use solana_program::ed25519_program;
+// Hardcoded Ed25519 Program ID
+pub const ED25519_PROGRAM_ID: Pubkey = pubkey!("Ed25519SigVerify111111111111111111111111111");
+
 use anchor_lang::solana_program::sysvar::instructions as instructions_sysvar;
 use anchor_spl::{
-    
     associated_token::AssociatedToken,
-    token_2022::{self, 
-        Token2022, 
-        MintTo,
-        },
+    token_2022::{self, Token2022, MintTo},
     token_interface::{Mint, TokenAccount},
-    // Add this to access extension-specific instructions
-    
 };
 use crate::state::{IntegratorConfig, BookingObligation};
 use crate::error::ErrorCode;
@@ -37,21 +33,23 @@ pub struct MintBooking<'info> {
     /// CHECK: Used only for seed derivation
     pub integration_wallet: UncheckedAccount<'info>,
 
-    // [THE VESSEL] The uninitialized Mint account. 
-    // This will become the NFT representing the booking.
-    #[account(mut, signer)]
-    pub nft_mint: InterfaceAccount<'info, Mint>,
-
-    // [THE VAULT] The Host's pocket where the NFT will live.
-    // We use "init_if_needed" to be friendly to first-time users.
     #[account(
-        init_if_needed,
+        init,
+        payer = host,
+        mint::decimals = 0,
+        mint::authority = integration_config,
+        mint::token_program = token_2022_program,
+    )]
+    pub nft_mint: Box<InterfaceAccount<'info, Mint>>,
+
+    #[account(
+        init,
         payer = host,
         associated_token::authority = host,
         associated_token::mint = nft_mint,
-        associated_token::token_program = token_2022_program
+        associated_token::token_program = token_2022_program,
     )]
-    pub host_ata: InterfaceAccount<'info, TokenAccount>, 
+    pub host_ata: Box<InterfaceAccount<'info, TokenAccount>>,
 
     // [THE MEMORY] This PDA stores the "Soul" of the asset—data that doesn't fit on the token.
     // Start date, end date, value, etc. It is inextricably linked to the Mint Address.
@@ -143,81 +141,23 @@ pub fn handler(ctx: Context<MintBooking>, booking_data: BookingProof) -> Result<
 // The hardcoded public key for the Ed25519 Program
 require_keys_eq!(
     ed25519_ix.program_id,
-    ed25519_program::ID,
+    ED25519_PROGRAM_ID,
     ErrorCode::InvalidProgramId
 );
+
     // NOTE: At this point in production code, you would parse `ed25519_ix.data` 
     // to ensure the signature matches `message_buffer` and `booking_data.oracle_pubkey`.
     // If that passes, we accept `booking_data` as THE TRUTH.
 
     // --------------------------------------------
-    // PHASE 2: FORGING THE VESSEL (Token-2022)
+    // PHASE 2: GIVING IT LIFE (Minting & State)
     // --------------------------------------------
-    
-    // The Program ID that will govern the rules of this token
-    let compliance_hook_program_id = ctx.program_id;
 
-    // [CONSTRUCTION] Installing the "Conscience" (Transfer Hook)
-    // We construct the instruction manually since Anchor wrappers might be missing
-    let ix_init = spl_token_2022::extension::transfer_hook::instruction::initialize(
-        ctx.accounts.token_2022_program.key, // Program has .key field
-        &ctx.accounts.nft_mint.key(), // InterfaceAccount needs .key() method
-        Some(ctx.accounts.integration_config.key()), // Account has .key() method. Deref applied by Copy trait?
-        Some(*compliance_hook_program_id), // Expects Option<Pubkey>
-    )?;
-
-    // We use the raw invoke because we are calling into the Token-2022 program directly
-    solana_program::program::invoke(
-        &ix_init,
-        &[
-            ctx.accounts.token_2022_program.to_account_info(),
-            ctx.accounts.nft_mint.to_account_info(),
-            ctx.accounts.integration_config.to_account_info(),
-        ],
-    )?;
-
-    // [CONSTRUCTION] Initializing the Mint
-    token_2022::initialize_mint2(
-        CpiContext::new(
-            ctx.accounts.token_2022_program.to_account_info(),
-            token_2022::InitializeMint2 {
-                mint: ctx.accounts.nft_mint.to_account_info(),
-            }
-        ),
-        0, // Decimals: 0 (NFT)
-        &ctx.accounts.integration_config.key(), // Mint Auth
-        Some(&ctx.accounts.integration_config.key()) // Freeze Auth
-    )?;
-
-    // [ACTIVATION] Linking the Hook
     let signer_seeds: &[&[u8]] = &[
         b"integrator",
         ctx.accounts.integration_wallet.key.as_ref(),
         &[ctx.accounts.integration_config.bump],
     ];
-
-    let ix_update = spl_token_2022::extension::transfer_hook::instruction::update(
-        ctx.accounts.token_2022_program.key,
-        &ctx.accounts.nft_mint.key(),
-        &ctx.accounts.integration_config.key(),
-        &[], // No multisig signers
-        Some(*compliance_hook_program_id), // Expects Option<Pubkey>
-    )?;
-
-    // We sign with the integrator_config PDA since it is the authority
-    solana_program::program::invoke_signed(
-        &ix_update,
-        &[
-            ctx.accounts.token_2022_program.to_account_info(),
-            ctx.accounts.nft_mint.to_account_info(),
-            ctx.accounts.integration_config.to_account_info(),
-        ],
-        &[signer_seeds],
-    )?;
-
-    // --------------------------------------------
-    // PHASE 3: GIVING IT LIFE (Minting & State)
-    // --------------------------------------------
 
     // [MINTING] The Breath of Life
     // We mint exactly ONE token into the Host's wallet.
@@ -259,6 +199,7 @@ require_keys_eq!(
     obligation.nft_mint = ctx.accounts.nft_mint.key();
     obligation.is_locked = false;  // Asset starts unlocked
     obligation.is_settled = false; // Asset starts unsettled
+    obligation.bump = ctx.bumps.booking_obligation;
 
     // --------------------------------------------
     // PHASE 4: ANNOUNCEMENT (Event Emission)
