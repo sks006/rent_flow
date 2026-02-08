@@ -1,0 +1,1327 @@
+{
+  "address": "29u6Rxe7tsrWFoUifHfvyYMqn3n9CBe5BmzuiPLk3CEJ",
+  "metadata": {
+    "name": "rent_flow",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "add_token",
+      "discriminator": [
+        237,
+        255,
+        26,
+        54,
+        56,
+        48,
+        68,
+        52
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "supported_token",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_vault",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "flexible_token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "ltv_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "deposit_collateral",
+      "discriminator": [
+        156,
+        131,
+        142,
+        116,
+        146,
+        247,
+        162,
+        120
+      ],
+      "accounts": [
+        {
+          "name": "host",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "obligation",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  98,
+                  108,
+                  105,
+                  103,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "nft_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_mint"
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "host_nft_ata",
+          "writable": true
+        },
+        {
+          "name": "host_usdc_ata",
+          "writable": true
+        },
+        {
+          "name": "vault_nft_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "obligation"
+              },
+              {
+                "kind": "account",
+                "path": "token_2022_program"
+              },
+              {
+                "kind": "account",
+                "path": "nft_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "vault_usdc_ata",
+          "writable": true
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "funding_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "integration_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  116,
+                  101,
+                  103,
+                  114,
+                  97,
+                  116,
+                  111,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "integration_wallet"
+              }
+            ]
+          }
+        },
+        {
+          "name": "integration_wallet"
+        },
+        {
+          "name": "pool_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "liquidate_default",
+      "discriminator": [
+        165,
+        16,
+        163,
+        173,
+        215,
+        241,
+        240,
+        28
+      ],
+      "accounts": [
+        {
+          "name": "liquidator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "obligation",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  98,
+                  108,
+                  105,
+                  103,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "nft_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_mint"
+        },
+        {
+          "name": "vault_nft_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "obligation"
+              },
+              {
+                "kind": "account",
+                "path": "token_2022_program"
+              },
+              {
+                "kind": "account",
+                "path": "nft_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "pool_nft_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool_vault"
+              },
+              {
+                "kind": "account",
+                "path": "token_2022_program"
+              },
+              {
+                "kind": "account",
+                "path": "nft_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "pool_vault"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "mint_booking",
+      "discriminator": [
+        76,
+        45,
+        69,
+        7,
+        152,
+        151,
+        25,
+        49
+      ],
+      "accounts": [
+        {
+          "name": "host",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "integration_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  116,
+                  101,
+                  103,
+                  114,
+                  97,
+                  116,
+                  111,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "integration_wallet"
+              }
+            ]
+          }
+        },
+        {
+          "name": "integration_wallet"
+        },
+        {
+          "name": "nft_mint",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "host_ata",
+          "writable": true
+        },
+        {
+          "name": "booking_obligation",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  98,
+                  108,
+                  105,
+                  103,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "nft_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "sysvar_instructions",
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "booking_data",
+          "type": {
+            "defined": {
+              "name": "BookingProof"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "settle_booking",
+      "discriminator": [
+        118,
+        241,
+        41,
+        192,
+        52,
+        160,
+        213,
+        100
+      ],
+      "accounts": [
+        {
+          "name": "host",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "obligation",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  98,
+                  108,
+                  105,
+                  103,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "nft_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "host_usdc_ata",
+          "writable": true
+        },
+        {
+          "name": "vault_usdc_ata",
+          "writable": true
+        },
+        {
+          "name": "nft_mint"
+        },
+        {
+          "name": "vault_nft_ata",
+          "writable": true
+        },
+        {
+          "name": "host_nft_ata",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "withdraw_liquidity",
+      "discriminator": [
+        149,
+        158,
+        33,
+        185,
+        47,
+        243,
+        253,
+        31
+      ],
+      "accounts": [
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "position",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  115,
+                  105,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "pool_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor_usdc_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "investor"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "usdc_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "pool_usdc_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool_vault"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "usdc_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "BookingObligation",
+      "discriminator": [
+        164,
+        239,
+        117,
+        145,
+        49,
+        231,
+        187,
+        207
+      ]
+    },
+    {
+      "name": "IntegratorConfig",
+      "discriminator": [
+        222,
+        107,
+        253,
+        91,
+        117,
+        41,
+        5,
+        100
+      ]
+    },
+    {
+      "name": "PoolVault",
+      "discriminator": [
+        9,
+        184,
+        204,
+        69,
+        231,
+        82,
+        252,
+        154
+      ]
+    },
+    {
+      "name": "Position",
+      "discriminator": [
+        170,
+        188,
+        143,
+        228,
+        122,
+        64,
+        247,
+        208
+      ]
+    },
+    {
+      "name": "SupportedToken",
+      "discriminator": [
+        56,
+        162,
+        96,
+        99,
+        193,
+        245,
+        204,
+        108
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "IntegratorNotAuthorized",
+      "msg": "The integrator is not authorized or is currently inactive."
+    },
+    {
+      "code": 6001,
+      "name": "NotHubOwner",
+      "msg": "The signer is not the authorized owner of this booking hub."
+    },
+    {
+      "code": 6002,
+      "name": "BookingAlreadyStarted",
+      "msg": "This booking has already started and cannot be modified."
+    },
+    {
+      "code": 6003,
+      "name": "AlreadyLocked",
+      "msg": "The asset is already locked in a financial cycle."
+    },
+    {
+      "code": 6004,
+      "name": "InvalidOracleKey",
+      "msg": "The provided oracle public key does not match the protocol config."
+    },
+    {
+      "code": 6005,
+      "name": "OracleMessageMismatch",
+      "msg": "The reconstructed message does not match the oracle's signature."
+    },
+    {
+      "code": 6006,
+      "name": "InvalidInstructionIndex",
+      "msg": "The instruction index for introspection is out of bounds."
+    },
+    {
+      "code": 6007,
+      "name": "InvalidProgramId",
+      "msg": "The expected program ID was not found in the instruction sysvar."
+    },
+    {
+      "code": 6008,
+      "name": "MathOverflow",
+      "msg": "A mathematical operation resulted in an overflow or underflow."
+    },
+    {
+      "code": 6009,
+      "name": "InvalidOffset",
+      "msg": "The account data offset is invalid for the requested operation."
+    },
+    {
+      "code": 6010,
+      "name": "BookingNotYetEnded",
+      "msg": "The rental period has not yet ended. Collateral is still locked."
+    },
+    {
+      "code": 6011,
+      "name": "AlreadySettled",
+      "msg": "Attempted to settle an already settled obligation."
+    },
+    {
+      "code": 6012,
+      "name": "NotYetSettled",
+      "msg": "The obligation has not yet been settled."
+    },
+    {
+      "code": 6013,
+      "name": "ObligationStillLocked",
+      "msg": "The obligation is still locked."
+    },
+    {
+      "code": 6014,
+      "name": "NotAuthorizedOwner",
+      "msg": "The host is not the authorized owner of this obligation."
+    },
+    {
+      "code": 6015,
+      "name": "LiquidityLocked",
+      "msg": "Liquidity is currently locked."
+    },
+    {
+      "code": 6016,
+      "name": "InvalidTier",
+      "msg": "The selected profit tier is invalid."
+    },
+    {
+      "code": 6017,
+      "name": "GracePeriodNotOver",
+      "msg": "The grace period has not yet ended."
+    }
+  ],
+  "types": [
+    {
+      "name": "BookingObligation",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "booking_id",
+            "type": "string"
+          },
+          {
+            "name": "booking_value",
+            "type": "u64"
+          },
+          {
+            "name": "max_principal",
+            "type": "u64"
+          },
+          {
+            "name": "borrowed_amount",
+            "type": "u64"
+          },
+          {
+            "name": "start_date",
+            "type": "i64"
+          },
+          {
+            "name": "end_date",
+            "type": "i64"
+          },
+          {
+            "name": "host_wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "integrator_wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "is_locked",
+            "type": "bool"
+          },
+          {
+            "name": "is_settled",
+            "type": "bool"
+          },
+          {
+            "name": "tier",
+            "type": {
+              "defined": {
+                "name": "ProfitTier"
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BookingProof",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "booking_id",
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "start_date",
+            "type": "i64"
+          },
+          {
+            "name": "end_date",
+            "type": "i64"
+          },
+          {
+            "name": "host_wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "oracle_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "tier_index",
+            "type": "u8"
+          },
+          {
+            "name": "investor_wallet",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IntegratorConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PoolVault",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_liquidity_tracked",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Position",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "principal",
+            "type": "u64"
+          },
+          {
+            "name": "realized_profit",
+            "type": "u64"
+          },
+          {
+            "name": "unlock_ts",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProfitTier",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "OneMonth"
+          },
+          {
+            "name": "ThreeMonth"
+          },
+          {
+            "name": "SixMonth"
+          },
+          {
+            "name": "TwelveMonth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SupportedToken",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "ltv_bps",
+            "type": "u16"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "_reserved",
+            "type": {
+              "array": [
+                "u8",
+                7
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "SEED",
+      "type": "string",
+      "value": "\"anchor\""
+    }
+  ]
+}
