@@ -160,9 +160,22 @@ export const createPropertySlice: StateCreator<
       
       const existingProperties = get().properties
       
+      // Separate minted properties (those with real mint addresses) from mock properties
+      const mintedProperties = existingProperties.filter(p => 
+        p.tokenInfo && p.id.length > 20 // Real Solana addresses are 32-44 chars
+      )
+      
+      // Only add mock properties that don't already exist
+      const newMockProperties = mockProperties.filter(m => 
+        !existingProperties.find(e => e.id === m.id)
+      )
+      
+      // Minted properties should appear first, then mock properties
       set({ 
-        properties: [...existingProperties, ...mockProperties.filter(m => !existingProperties.find(e => e.id === m.id))],
-        featuredProperties: mockProperties.slice(0, 3),
+        properties: [...mintedProperties, ...newMockProperties],
+        featuredProperties: mintedProperties.length > 0 
+          ? [...mintedProperties.slice(0, 3), ...mockProperties.slice(0, Math.max(0, 3 - mintedProperties.length))]
+          : mockProperties.slice(0, 3),
         isFetching: false 
       })
       
@@ -312,9 +325,9 @@ export const createPropertySlice: StateCreator<
           propertyValue: (propertyData.pricePerNight || 100) * 365 * 15
         },
         verification: {
-          isVerified: propertyData.verification?.isVerified || false,
-          level: propertyData.verification?.level || 'none',
-          score: propertyData.verification?.score || 0,
+          isVerified: true, // Mark newly minted properties as verified
+          level: propertyData.verification?.level || 'blockchain',
+          score: propertyData.verification?.score || 100,
           verifiedAt: new Date().toISOString()
         },
         createdAt: new Date().toISOString(),

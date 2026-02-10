@@ -29,6 +29,9 @@ const nextConfig = {
       },
     ],
   },
+  // Migrated from experimental.serverComponentsExternalPackages
+  serverExternalPackages: ['puppeteer-core', 'puppeteer'],
+  // Keep webpack config for compatibility
   webpack: (config) => {
     config.resolve.fallback = { 
       fs: false, 
@@ -39,9 +42,8 @@ const nextConfig = {
     };
     return config;
   },
-  experimental: {
-    serverComponentsExternalPackages: ['puppeteer-core', 'puppeteer'],
-  },
+  // Empty turbopack config to silence warnings
+  turbopack: {},
 }
 
 export default nextConfig

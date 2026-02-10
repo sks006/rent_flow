@@ -195,7 +195,7 @@ export default function InvestPage() {
             >
               {/* Property Image */}
               <div className="h-48 bg-gradient-to-br from-blue-500/20 to-purple-500/20 relative">
-                <div className="absolute top-4 left-4">
+                <div className="absolute top-4 left-4 flex gap-2">
                   {property.verification.isVerified ? (
                     <div className="px-3 py-1 rounded-full bg-green-500/20 border border-green-500/30 backdrop-blur-sm">
                       <span className="text-sm font-medium text-green-400">Verified</span>
@@ -203,6 +203,12 @@ export default function InvestPage() {
                   ) : (
                     <div className="px-3 py-1 rounded-full bg-yellow-500/20 border border-yellow-500/30 backdrop-blur-sm">
                       <span className="text-sm font-medium text-yellow-400">Unverified</span>
+                    </div>
+                  )}
+                  {/* Show "New" badge for recently minted properties */}
+                  {property.tokenInfo && new Date(property.createdAt).getTime() > Date.now() - 3600000 && (
+                    <div className="px-3 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 backdrop-blur-sm">
+                      <span className="text-sm font-medium text-blue-400">🆕 New</span>
                     </div>
                   )}
                 </div>

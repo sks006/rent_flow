@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Navbar from '@/components/common/Navbar'
 import { useStore } from '@/store/useStore'
 import { motion } from 'framer-motion'
@@ -20,6 +21,7 @@ import {
 } from 'lucide-react'
 
 export default function HostPage() {
+  const router = useRouter()
   const [url, setUrl] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
@@ -97,10 +99,17 @@ export default function HostPage() {
         walletPublicKey!.toString()
       )
       
-      alert(result)
+      // Show success message with mint address
+      alert(result + '\n\nRedirecting to Invest page...')
+      
       // Reset form
       setUrl('')
       resetAirbnbVerification()
+      
+      // Navigate to invest page after a short delay
+      setTimeout(() => {
+        router.push('/invest')
+      }, 1000)
       
     } catch (err: any) {
       setError(err.message || 'Tokenization failed')
