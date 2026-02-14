@@ -31,14 +31,14 @@ export default function RootLayout({
 }) {
 
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <title>RentFlow - Tokenize Airbnb Properties on Solana</title>
         <meta name="description" content="Dynamic platform to tokenize verified Airbnb properties into RWA assets. Open to all wallets and all Airbnb URLs." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <QueryClientProvider client={queryClient}>
           <SolanaProvider>
             <WalletSync />
