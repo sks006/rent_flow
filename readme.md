@@ -1,5 +1,15 @@
 # 🌊 RentFlow: Cash-Flow RWA Protocol
+## 🚀 Live Protocol Deployment
 
+Access the RentFlow Dashboard here: 
+[https://rent-flow-pi.vercel.app/](https://rent-flow-pi.vercel.app/)
+
+---
+
+### 🛠 Quick Start
+1. Connect **Phantom** (Devnet)
+2. Paste an **Airbnb URL**
+3. Mint **RWA Tokens**
 ### *Unlocking the Liquidity of Future Rental Income*
 
 RentFlow is a Solana-native B2B2C protocol that allows Property Management Companies to tokenize future Airbnb/rental income into Real-World Asset (RWA) NFTs. By selling a portion of their future profit today, hosts gain instant liquidity, while investors earn "Real Yield" from verified business performance.
