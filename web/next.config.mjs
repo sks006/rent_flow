@@ -42,8 +42,12 @@ const nextConfig = {
     };
     return config;
   },
-  // Empty turbopack config to silence warnings
-  turbopack: {},
+  // Silence Turbopack root directory warnings
+  experimental: {
+    turbopack: {
+      root: '..',
+    },
+  },
 }
 
 export default nextConfig
